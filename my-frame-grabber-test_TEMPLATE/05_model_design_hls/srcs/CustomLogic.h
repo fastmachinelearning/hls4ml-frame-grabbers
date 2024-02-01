@@ -4,6 +4,8 @@
 #include "ap_int.h"
 #include "ap_fixed.h"
 
+#define PIXEL_FORMAT  // CustomLogic: INSERT PIXEL FORMAT. VALID VALUES: 8,16
+
 #define NORM_DIV  // CustomLogic: INSERT NORMALIZATION DIVISOR
 
 #define IMAGE_WIDTH  // CustomLogic: INSERT ACQUISITION FRAME WIDTH
@@ -35,12 +37,12 @@ typedef struct Metadata_struct {
 } Metadata_t;
 
 
-typedef ap_uint<8> pixMono8;
-#define MONO8PIX_NBR 32
-#define MONO8PIX(j) Data((8*(j))+7,(8*(j)))
-#define MONO8INDEXPIX(j) ((8*(j))+7,(8*(j)))
+typedef ap_uint<PIXEL_FORMAT> pixMono;
+#define MONOPIX_NBR (STREAM_DATA_WIDTH/PIXEL_FORMAT)
+#define MONOPIX(j) Data((PIXEL_FORMAT*(j))+(PIXEL_FORMAT-1),(PIXEL_FORMAT*(j)))
+#define MONOINDEXPIX(j) ((PIXEL_FORMAT*(j))+(PIXEL_FORMAT-1),(PIXEL_FORMAT*(j)))
 
-typedef ap_uint<MONO8PIX_NBR*8> DataMono8;
+typedef ap_uint<MONOPIX_NBR*PIXEL_FORMAT> DataMono;
 typedef ap_uint<4> User;
 
 #define SOF User(0,0)==1
@@ -53,18 +55,18 @@ typedef ap_uint<4> User;
 #define nEndOF User(3,3)==0
 
 typedef struct video_struct{
-  DataMono8 Data;
+  DataMono Data;
   ap_uint<4> User;
 } video_if_t;
 
-typedef struct pix_fmt_mono8{
-  unsigned char Pixel[MONO8PIX_NBR];
-}Mono8;
+typedef struct pix_fmt_mono{
+  unsigned char Pixel[MONOPIX_NBR];
+}Mono;
 
 static const unsigned NUM_STRIPES = IMAGE_HEIGHT/(BLOCK_HEIGHT/2); // Number of stripes in image
 static const unsigned stripe_order[NUM_STRIPES] = /* CustomLogic: INSERT STRIPE ORDER HERE */ ; 
 static const unsigned STRIPE_HEIGHT = BLOCK_HEIGHT/2; // Stripe height in pixels
-static const unsigned PACKETS_PER_IMAGE = (IMAGE_HEIGHT * IMAGE_WIDTH) / MONO8PIX_NBR; // Number of CoaXPress packets per image
-static const unsigned PACKETS_PER_STRIPE = ((IMAGE_HEIGHT * IMAGE_WIDTH) / MONO8PIX_NBR) / (IMAGE_HEIGHT/(BLOCK_HEIGHT/2)); // Number of CoaXPress packets per stripe
+static const unsigned PACKETS_PER_IMAGE = (IMAGE_HEIGHT * IMAGE_WIDTH) / MONOPIX_NBR; // Number of CoaXPress packets per image
+static const unsigned PACKETS_PER_STRIPE = ((IMAGE_HEIGHT * IMAGE_WIDTH) / MONOPIX_NBR) / (IMAGE_HEIGHT/(BLOCK_HEIGHT/2)); // Number of CoaXPress packets per stripe
 
 #endif 

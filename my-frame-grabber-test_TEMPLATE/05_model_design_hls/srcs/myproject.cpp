@@ -46,7 +46,7 @@ void unpack_data(hls::stream<input_arr_t> (&input_arr_split_reordered)[NUM_STRIP
     input_arr_t temp_arr_in = input_arr_split_reordered[curr_Y / STRIPE_HEIGHT].read(); // Read CoaxPress packet
 
     // Check if current packet holds any portion of the desired crop region
-    if(((curr_X + MONO8PIX_NBR) >= CROP_START_X) && (curr_X < (CROP_START_X + CROP_WIDTH)) && (curr_Y >= CROP_START_Y) && (curr_Y < (CROP_START_Y + CROP_HEIGHT))){
+    if(((curr_X + MONOPIX_NBR) >= CROP_START_X) && (curr_X < (CROP_START_X + CROP_WIDTH)) && (curr_Y >= CROP_START_Y) && (curr_Y < (CROP_START_Y + CROP_HEIGHT))){
 
       unsigned rel_START_X; // Relative x start position within current packet which holds part of the desired crop region
       unsigned rel_END_X;   // Relative x end position
@@ -57,10 +57,10 @@ void unpack_data(hls::stream<input_arr_t> (&input_arr_split_reordered)[NUM_STRIP
         rel_START_X = 0;
       }
 
-      if((curr_X + MONO8PIX_NBR) > (CROP_START_X + CROP_WIDTH)){
+      if((curr_X + MONOPIX_NBR) > (CROP_START_X + CROP_WIDTH)){
         rel_END_X = (CROP_START_X + CROP_WIDTH) - curr_X;
       }else{
-        rel_END_X = MONO8PIX_NBR;
+        rel_END_X = MONOPIX_NBR;
       }
 
       // Unpack pixels and write to the NN input stream
@@ -77,11 +77,11 @@ void unpack_data(hls::stream<input_arr_t> (&input_arr_split_reordered)[NUM_STRIP
     }
 
     // Track position in frame
-    if(curr_X == (IMAGE_WIDTH - MONO8PIX_NBR)){
+    if(curr_X == (IMAGE_WIDTH - MONOPIX_NBR)){
       curr_X = 0;
       curr_Y++;
     }else{
-      curr_X = curr_X + MONO8PIX_NBR;
+      curr_X = curr_X + MONOPIX_NBR;
     }
   }
 }
@@ -144,9 +144,9 @@ void read_pixel_data(hls::stream<video_if_t> &VideoIn, hls::stream<video_if_t> &
         input_arr_t ctype;
 
         Process_pixel:
-        for (unsigned char i = 0; i < MONO8PIX_NBR; i++) {
-          output_buf.MONO8PIX(i) = DataBuf.MONO8PIX(i);
-          ctype[i] = ((ap_ufixed<32,pixMono8::width>)DataBuf.MONO8PIX(i)) / NORM_DIV; //Normalize pixel values and set input to model // TODO: Add functions for different methods of scaling.
+        for (unsigned char i = 0; i < MONOPIX_NBR; i++) {
+          output_buf.MONOPIX(i) = DataBuf.MONOPIX(i);
+          ctype[i] = ((ap_ufixed<32,pixMono::width>)DataBuf.MONOPIX(i)) / NORM_DIV; //Normalize pixel values and set input to model // TODO: Add functions for different methods of scaling.
         }
 
 				// Set output control signal
@@ -198,7 +198,7 @@ void attach_results(hls::stream<result_t> &layer_out, hls::stream<video_if_t> &V
   unsigned start_idx = result_t::value_type::width * result_t::size;
   bool overlap = false;
 
-  for(unsigned i = 0; i < (IMAGE_HEIGHT * IMAGE_WIDTH) / MONO8PIX_NBR; i++){
+  for(unsigned i = 0; i < (IMAGE_HEIGHT * IMAGE_WIDTH) / MONOPIX_NBR; i++){
     #pragma HLS PIPELINE
 
     VideoBuffer >> DataOut;
@@ -228,7 +228,7 @@ void attach_results(hls::stream<result_t> &layer_out, hls::stream<video_if_t> &V
 
         output_count++;
 
-        assert(((output_count * result_t::size * result_t::value_type::width) < (IMAGE_HEIGHT * IMAGE_WIDTH * pixMono8::width)) && "CustomLogic: Your model output is too large!! The total size of your model output (in bits) is larger than the image."); // Check that size (in bits) of predictions are less than size of full image
+        assert(((output_count * result_t::size * result_t::value_type::width) < (IMAGE_HEIGHT * IMAGE_WIDTH * pixMono::width)) && "CustomLogic: Your model output is too large!! The total size of your model output (in bits) is larger than the image."); // Check that size (in bits) of predictions are less than size of full image
 
         start_idx = result_t::value_type::width * result_t::size;
       }
@@ -285,16 +285,16 @@ void myproject(
     result_t::value_type &ModelOutLast // Output a single bit so we can monitor inference latency
 ) {
 
-    assert((((IMAGE_HEIGHT * IMAGE_WIDTH * pixMono8::width) % STREAM_DATA_WIDTH) == 0) && "CustomLogic: Your image size (in bits) must be a multiple of the stream depth (Octo: 128, Quad CXP-12: 256)");
+    assert((((IMAGE_HEIGHT * IMAGE_WIDTH * pixMono::width) % STREAM_DATA_WIDTH) == 0) && "CustomLogic: Your image size (in bits) must be a multiple of the stream depth (Octo: 128, Quad CXP-12: 256)");
     
-    assert(((IMAGE_WIDTH % MONO8PIX_NBR) == 0) && "CustomLogic: Your image width (in pixels) must be a multiple of the stream depth (in pixels, see value of MONO8PIX_NBR)");
+    assert(((IMAGE_WIDTH % MONOPIX_NBR) == 0) && "CustomLogic: Your image width (in pixels) must be a multiple of the stream depth (in pixels, see value of MONOPIX_NBR)");
     
     assert(((IMAGE_HEIGHT % BLOCK_HEIGHT) == 0) && "CustomLogic: Block height must be a multiple of the image height");
 
     //hls-fpga-machine-learning insert IO
     #pragma HLS DATAFLOW 
 
-    unsigned PACKED_DEPTH =  ((IMAGE_WIDTH * IMAGE_HEIGHT) / MONO8PIX_NBR);
+    unsigned PACKED_DEPTH =  ((IMAGE_WIDTH * IMAGE_HEIGHT) / MONOPIX_NBR);
     unsigned UNPACKED_DEPTH = (IMAGE_WIDTH * IMAGE_HEIGHT);
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////

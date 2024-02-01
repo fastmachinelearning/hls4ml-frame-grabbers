@@ -51,7 +51,7 @@ void reorder_stripes(hls::stream<video_if_t> &VideoInOrdered, hls::stream<video_
 
   // Construct and stream raw image to CoaxPress input in unordered pattern
   for(unsigned i = 0; i < IMAGE_HEIGHT; i++){
-    for(unsigned j = 0; j < IMAGE_WIDTH / MONO8PIX_NBR; j++){
+    for(unsigned j = 0; j < IMAGE_WIDTH / MONOPIX_NBR; j++){
       video_if_t data_packet;
       VideoInOrdered >> data_packet;
       VideoInOrderedArr[find_index(i/STRIPE_HEIGHT)] << data_packet;
@@ -60,7 +60,7 @@ void reorder_stripes(hls::stream<video_if_t> &VideoInOrdered, hls::stream<video_
 
   // Attach TUSER side-band info.
   for(unsigned i = 0; i < IMAGE_HEIGHT; i++){
-    for(unsigned j = 0; j < IMAGE_WIDTH / MONO8PIX_NBR; j++){
+    for(unsigned j = 0; j < IMAGE_WIDTH / MONOPIX_NBR; j++){
       video_if_t data_packet;
       VideoInOrderedArr[i/STRIPE_HEIGHT] >> data_packet;
 
@@ -68,9 +68,9 @@ void reorder_stripes(hls::stream<video_if_t> &VideoInOrdered, hls::stream<video_
         data_packet.User = 0b0011;
       }else if(j == 0){ // start of line
         data_packet.User = 0b0010;
-      }else if(i == (IMAGE_HEIGHT - 1) && j == ((IMAGE_WIDTH / MONO8PIX_NBR) - 1)){ // end of frame, end of line
+      }else if(i == (IMAGE_HEIGHT - 1) && j == ((IMAGE_WIDTH / MONOPIX_NBR) - 1)){ // end of frame, end of line
         data_packet.User = 0b1100; 
-      }else if(j == ((IMAGE_WIDTH / MONO8PIX_NBR) - 1)){ // end of line
+      }else if(j == ((IMAGE_WIDTH / MONOPIX_NBR) - 1)){ // end of line
         data_packet.User = 0b0100;
       }
 
@@ -87,13 +87,13 @@ void copy_image_data(std::vector<float> in, hls::stream<video_if_t> &VideoInOrde
 
   // Construct and stream raw image to CoaxPress input
   for(unsigned i = 0; i < IMAGE_HEIGHT; i++){
-    for(unsigned j = 0; j < IMAGE_WIDTH / MONO8PIX_NBR; j++){
-      DataMono8 data_packet;
+    for(unsigned j = 0; j < IMAGE_WIDTH / MONOPIX_NBR; j++){
+      DataMono data_packet;
 
       // Pack pixels
-      for(unsigned k=0; k < MONO8PIX_NBR; k++){
-        pixMono8 pixel_in = (pixMono8)(in[(i*(IMAGE_WIDTH / MONO8PIX_NBR) * MONO8PIX_NBR) + (j*MONO8PIX_NBR) + k]);
-        data_packet.range((k * pixMono8::width) + (pixMono8::width - 1), k * (pixMono8::width)) = pixel_in.range(pixMono8::width - 1, 0);
+      for(unsigned k=0; k < MONOPIX_NBR; k++){
+        pixMono pixel_in = (pixMono)(in[(i*(IMAGE_WIDTH / MONOPIX_NBR) * MONOPIX_NBR) + (j*MONOPIX_NBR) + k]);
+        data_packet.range((k * pixMono::width) + (pixMono::width - 1), k * (pixMono::width)) = pixel_in.range(pixMono::width - 1, 0);
 
         // #ifndef __SYNTHESIS__
         //   std::cout << pixel_in << " ";
@@ -152,11 +152,11 @@ int main(int argc, char **argv)
       // std::cout << "\n\nReceived Image: \n";
       video_if_t video_packet_out;
       for(unsigned i = 0; i < IMAGE_HEIGHT; i++){
-        for(unsigned j = 0; j < IMAGE_WIDTH / MONO8PIX_NBR; j++){
+        for(unsigned j = 0; j < IMAGE_WIDTH / MONOPIX_NBR; j++){
           VideoOut >> video_packet_out;
-          for(unsigned k = 0; k < MONO8PIX_NBR; k++){
-            pixMono8 pixel_out; 
-            pixel_out.range(pixMono8::width - 1, 0) = video_packet_out.MONO8PIX(k);
+          for(unsigned k = 0; k < MONOPIX_NBR; k++){
+            pixMono pixel_out; 
+            pixel_out.range(pixMono::width - 1, 0) = video_packet_out.MONOPIX(k);
             // std::cout << pixel_out << " ";
           }
         }
