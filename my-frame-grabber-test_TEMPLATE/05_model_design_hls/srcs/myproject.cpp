@@ -22,7 +22,12 @@
 #include "parameters.h"
 
 
-// Unpacks image data and crops image. Forwards ROI to model
+/**
+ * @brief Unpacks image data and crops image. Forwards ROI to model input.
+ * 
+ * @param input_arr_split_reordered reordered camera data stream
+ * @param input_1 model input stream
+ */
 void unpack_data(hls::stream<input_arr_t> (&input_arr_split_reordered)[NUM_STRIPES], hls::stream<input_t> &input_1){
 
   assert(((CROP_START_X >= 0) && (CROP_START_X <= IMAGE_WIDTH) && ((CROP_START_X + CROP_WIDTH) <= IMAGE_WIDTH) && (CROP_START_Y >= 0) && (CROP_START_Y <= IMAGE_HEIGHT) && ((CROP_START_Y + CROP_HEIGHT) <= IMAGE_HEIGHT)) && "CustomLogic: Your crop region must be inside the image!");
@@ -82,7 +87,12 @@ void unpack_data(hls::stream<input_arr_t> (&input_arr_split_reordered)[NUM_STRIP
 }
 
 
-// Reads and duplicates CoaxPress image data into buffer and model input stream 
+/**
+ * @brief Reads and duplicates CoaxPress image data into buffer and model input stream 
+ * 
+ * @param VideoIn CustomLogic input data stream from camera
+ * @param VideoBuffer Buffer to attach predictions and forward to host
+ */
 void read_pixel_data(hls::stream<video_if_t> &VideoIn, hls::stream<video_if_t> &VideoBuffer, hls::stream<input_arr_t> (&input_arr_split_reordered)[NUM_STRIPES]){
 
   // Whether or not we're in the frame
@@ -163,7 +173,14 @@ void read_pixel_data(hls::stream<video_if_t> &VideoIn, hls::stream<video_if_t> &
 }
 
 
-// Insert neural network predictions to head of image output.
+/**
+ * @brief Insert neural network predictions to head of image output.
+ * 
+ * @param layer_out Model output stream
+ * @param VideoBuffer Buffered image from camera
+ * @param VideoOut CustomLogic output stream
+ * @param ModelOutLast Final model output, used to mark inference completion on TTL IO
+ */
 void attach_results(hls::stream<result_t> &layer_out, hls::stream<video_if_t> &VideoBuffer, hls::stream<video_if_t> &VideoOut, result_t::value_type &ModelOutLast){
 
   #ifndef __SYNTHESIS__
@@ -255,7 +272,13 @@ void attach_results(hls::stream<result_t> &layer_out, hls::stream<video_if_t> &V
   #endif
 }
 
-
+/**
+ * @brief network architecture and image stream processing 
+ * 
+ * @param VideoIn CustomLogic input stream
+ * @param VideoOut CustomLogic output stream
+ * @param ModelOutLast Final model output, used for inference benchmarking
+ */
 void myproject(
     hls::stream<video_if_t> &VideoIn, 
     hls::stream<video_if_t> &VideoOut,
@@ -273,8 +296,6 @@ void myproject(
 
     unsigned PACKED_DEPTH =  ((IMAGE_WIDTH * IMAGE_HEIGHT) / MONO8PIX_NBR);
     unsigned UNPACKED_DEPTH = (IMAGE_WIDTH * IMAGE_HEIGHT);
-
-
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////
     
