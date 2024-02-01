@@ -284,6 +284,7 @@ void myproject(
     hls::stream<video_if_t> &VideoOut,
     result_t::value_type &ModelOutLast // Output a single bit so we can monitor inference latency
 ) {
+    assert(((PIXEL_FORMAT == 8) || (PIXEL_FORMAT == 16)) && "CustomLogic: Pixel format must be set to 8 or 16 (for 12, set to 16)");
 
     assert((((IMAGE_HEIGHT * IMAGE_WIDTH * pixMono::width) % STREAM_DATA_WIDTH) == 0) && "CustomLogic: Your image size (in bits) must be a multiple of the stream depth (Octo: 128, Quad CXP-12: 256)");
     
