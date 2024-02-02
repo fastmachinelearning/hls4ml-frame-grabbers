@@ -55,7 +55,6 @@ proc customlogic_bitgen {} {
   #   puts "Opened impl_1"    
 	# }
 
-
 	# Get UserID and PlatformID
 	set fileCustomLogicSettings [open "$currentSettingsPath/CustomLogic.set" r]
 	set dataCustomLogicSettings [read $fileCustomLogicSettings]
