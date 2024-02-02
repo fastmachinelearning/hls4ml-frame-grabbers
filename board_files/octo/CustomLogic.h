@@ -15,7 +15,7 @@
 #define CROP_WIDTH  // CustomLogic: INSERT DESIRED CROP WIDTH 
 #define CROP_HEIGHT  // CustomLogic: INSERT DESIRED CROP HEIGHT
 
-#define BLOCK_HEIGHT  // Block height (parameter determined by eGrabber, copy here)
+#define BLOCK_HEIGHT  // CustomLogic: INSERT BLOCK HEIGHT PARAMETER FROM EGRABBER
 
 #define STREAM_DATA_WIDTH 128 // DO NOT CHANGE
 
