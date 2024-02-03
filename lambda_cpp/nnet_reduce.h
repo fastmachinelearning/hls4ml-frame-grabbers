@@ -17,6 +17,8 @@ void reduce(
     hls::stream<res_T> &res
 ) {
 
+    static const ap_ufixed<8,0> threshold = 0.7;
+
     ReduceLoopRow:
     for(int my = 0; my < 8; my++){
       ReduceLoopCol:
@@ -27,7 +29,7 @@ void reduce(
         res_T out_data; // output is {32 (probable), 31:25 (start_x), 24:18 (start_y), 17:11 (start_x), 10:4 (start_y), 3:0 (class)}
         #pragma HLS DATA_PACK variable=out_data
         
-        out_data[0].range(32,32) = (in_data[0] > 0.7) ? 1 : 0; // If probability is > 0.7, we consider the digit to be present
+        out_data[0].range(32,32) = (in_data[0] > threshold) ? 1 : 0; // If probability is > 0.7, we consider the digit to be present
 
         /* Calculate Bounding Box */
         out_data[0].range(31,25) = (CONFIG_T::grid_size * mx) + in_data[1]; // px = (mx * grid_size) + x1
