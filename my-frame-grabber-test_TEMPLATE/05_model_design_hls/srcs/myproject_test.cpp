@@ -145,9 +145,9 @@ int main(int argc, char **argv)
 
       Metadata_t MetaIn;
       Metadata_t MetaOut;
-      result_t::value_type ModelOutLast; // Packed model output
+      result_t::value_type ModelOutFirst; // Packed model output
 
-      myproject_axi(VideoIn, VideoOut, &MetaIn, &MetaOut, ModelOutLast); // Instantiate neural network
+      myproject_axi(VideoIn, VideoOut, &MetaIn, &MetaOut, ModelOutFirst); // Instantiate neural network
           
       // std::cout << "\n\nReceived Image: \n";
       video_if_t video_packet_out;

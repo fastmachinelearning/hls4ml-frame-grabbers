@@ -179,9 +179,9 @@ void read_pixel_data(hls::stream<video_if_t> &VideoIn, hls::stream<video_if_t> &
  * @param layer_out Model output stream
  * @param VideoBuffer Buffered image from camera
  * @param VideoOut CustomLogic output stream
- * @param ModelOutLast Final model output, used to mark inference completion on TTL IO
+ * @param ModelOutFirst Final model output, used to mark inference completion on TTL IO
  */
-void attach_results(hls::stream<result_t> &layer_out, hls::stream<video_if_t> &VideoBuffer, hls::stream<video_if_t> &VideoOut, result_t::value_type &ModelOutLast){
+void attach_results(hls::stream<result_t> &layer_out, hls::stream<video_if_t> &VideoBuffer, hls::stream<video_if_t> &VideoOut){
 
   #ifndef __SYNTHESIS__
     std::ofstream fout("../../../../tb_data/csim_results.log", std::ios::app);
@@ -221,10 +221,6 @@ void attach_results(hls::stream<result_t> &layer_out, hls::stream<video_if_t> &V
             fout << temp[i] << " ";
           }
         #endif
-
-        if(layer_out.empty()){
-          ModelOutLast = temp[0]; // Output last model output to signal inference completion
-        }
 
         output_count++;
 
@@ -273,16 +269,31 @@ void attach_results(hls::stream<result_t> &layer_out, hls::stream<video_if_t> &V
 }
 
 /**
+ * @brief Send model output level to top level ap_vld for benchmarking
+ * 
+ * @param layer_out first result from model output stream
+ * @param ModelOutFirst model output sample
+ */
+void benchmark_model(hls::stream<result_t> &layer_out, result_t::value_type &ModelOutFirst){
+  ModelOutFirst = layer_out.read()[0];
+
+  while(!layer_out.empty()){
+    layer_out.read();
+  }
+}
+
+
+/**
  * @brief network architecture and image stream processing 
  * 
  * @param VideoIn CustomLogic input stream
  * @param VideoOut CustomLogic output stream
- * @param ModelOutLast Final model output, used for inference benchmarking
+ * @param ModelOutFirst Final model output, used for inference benchmarking
  */
 void myproject(
     hls::stream<video_if_t> &VideoIn, 
     hls::stream<video_if_t> &VideoOut,
-    result_t::value_type &ModelOutLast // Output a single bit so we can monitor inference latency
+    result_t::value_type &ModelOutFirst // Output a model result so we can monitor inference latency
 ) {
     assert(((PIXEL_FORMAT == 8) || (PIXEL_FORMAT == 16)) && "CustomLogic: Pixel format must be set to 8 or 16 (for 12, set to 16)");
 
@@ -295,8 +306,26 @@ void myproject(
     //hls-fpga-machine-learning insert IO
     #pragma HLS DATAFLOW 
 
-    unsigned PACKED_DEPTH =  ((IMAGE_WIDTH * IMAGE_HEIGHT) / MONOPIX_NBR);
-    unsigned UNPACKED_DEPTH = (IMAGE_WIDTH * IMAGE_HEIGHT);
+    static unsigned PACKED_DEPTH =  ((IMAGE_WIDTH * IMAGE_HEIGHT) / MONOPIX_NBR);
+    static unsigned UNPACKED_DEPTH = (CROP_WIDTH * CROP_HEIGHT);
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    
+
+  static unsigned MODEL_OUT_DEPTH = /* CustomLogic: INSERT LAST NETWORK LAYER OUTPUT STREAM HERE */;
+
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+    hls::stream<result_t> layerfinal_out("layerfinal_out");
+    #pragma HLS STREAM variable=layerfinal_out depth=MODEL_OUT_DEPTH
+
+    hls::stream<result_t> layerfinal_out_cpy1("layerfinal_out_cpy1");
+    #pragma HLS STREAM variable=layerfinal_out_cpy1 depth=MODEL_OUT_DEPTH
+
+    hls::stream<result_t> layerfinal_out_cpy2("layerfinal_out_cpy2");
+    #pragma HLS STREAM variable=layerfinal_out_cpy2 depth=MODEL_OUT_DEPTH
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////
     
@@ -306,11 +335,15 @@ void myproject(
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-    //hls-fpga-machine-learning insert layers
     hls::stream<input_arr_t> input_arr_split_reordered[NUM_STRIPES];
-    for(unsigned i = 0; i < NUM_STRIPES; i++){
-      #pragma HLS STREAM variable=input_arr_split_reordered[i] depth=PACKETS_PER_STRIPE
-    }
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    
+
+/* CustomLogic: INSESRT NETWORK SPLIT ARRAY HLS STREAM PRAGMAS HERE (from jupyter notebook) */
+
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
     hls::stream<video_if_t> VideoBuffer; // Holds buffered unaltered image
     #pragma HLS STREAM variable=VideoBuffer depth=PACKED_DEPTH
@@ -324,9 +357,16 @@ void myproject(
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-    /* CustomLogic: INSESRT NEURAL NETWORK LAYERS HERE */
+
+/* CustomLogic: INSESRT NEURAL NETWORK LAYERS HERE */
+
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-    attach_results( /* CustomLogic: INSERT LAST NETWORK LAYER OUTPUT STREAM HERE */ , VideoBuffer, VideoOut, ModelOutLast); // Attach neural network predictions to image output
+    nnet::clone_stream<result_t, result_t, MODEL_OUT_DEPTH*result_t::size>(layerfinal_out, layerfinal_out_cpy1, layerfinal_out_cpy2); // Clone model output stream
+
+    attach_results(layerfinal_out_cpy1, VideoBuffer, VideoOut); // Attach neural network predictions to image output
+
+    benchmark_model(layerfinal_out_cpy2, ModelOutFirst); // Output one copy of model output to trigger ap_vld, enable easy benchmarking
+
 }

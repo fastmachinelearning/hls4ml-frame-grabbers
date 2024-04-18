@@ -33,7 +33,7 @@
 void myproject(
     hls::stream<video_if_t> &VideoIn, 
     hls::stream<video_if_t> &VideoOut,
-    result_t::value_type &ModelOutLast
+    result_t::value_type &ModelOutFirst
 );
 
 #endif
