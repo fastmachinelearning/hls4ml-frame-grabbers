@@ -317,7 +317,6 @@ void myproject(
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-
     hls::stream<result_t> layerfinal_out("layerfinal_out");
     #pragma HLS STREAM variable=layerfinal_out depth=MODEL_OUT_DEPTH
 
