@@ -28,7 +28,7 @@
 #include "myproject_axi.h"
 #include "nnet_utils/nnet_helpers.h"
 
-#define LIMIT 20
+#define LIMIT 100
 
 namespace nnet {
 bool trace_enabled = false;
