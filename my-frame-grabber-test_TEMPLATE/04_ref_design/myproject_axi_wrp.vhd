@@ -193,8 +193,8 @@ begin
             MetaOut_PixProcessingFlgs => pixth_PixProcFlgs,
             MetaOut_ModPixelF         => open,
             MetaOut_Status            => pixth_Status,
-            ModelOutLast_V            => open,
-            ModelOutLast_V_ap_vld     => Result_V_ap_vld
+            ModelOutFirst_V            => open,
+            ModelOutFirst_V_ap_vld     => Result_V_ap_vld
         );   
 
   iSignalInference : entity work.signal_inference
