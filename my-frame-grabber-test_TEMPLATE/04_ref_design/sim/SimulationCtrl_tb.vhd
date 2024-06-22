@@ -262,7 +262,7 @@ begin
 		Ref_MementoEvent_gen	(clk,status,ctrl, 0, x"AAAAAAAA");
 		Ref_PixelLut_Negative_on(clk,status,ctrl, 0);
 		EnableDataStream		(clk,status,ctrl, 0);
-    	FrameRequest			(clk,status,ctrl, 0, 10, 128, 32, Mono8, FALSE);
+    	FrameRequest			(clk,status,ctrl, 0, 10, 128, 48, Mono8, FALSE);
 
 		-- To read image data from a file, change the absolute path here below to locate the file containing the data.
 		-- In addition, Linux users must update the FILE_PATH_LENGTH constant in Simulation_FileIO_pkg.vhd
