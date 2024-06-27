@@ -17,7 +17,7 @@ void reduce(
     hls::stream<res_T> &res
 ) {
 
-    static const ap_ufixed<8,0> threshold = 0.85; // Higher threshold seems to benefit hardware
+    static const ap_ufixed<8,0> threshold = 0.9;
 
     ReduceLoopRow:
     for(int my = 0; my < 3; my++){
