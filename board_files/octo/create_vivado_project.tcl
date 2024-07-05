@@ -86,7 +86,6 @@ proc customlogicCreateProject {} {
 		"[file normalize "$customlogic_dir/02_coaxlink/ips/sout_fifo.xcix"]"\
 		"[file normalize "$customlogic_dir/02_coaxlink/ips/TimingMachineProg_BRAM_72x512.xcix"]"\
 		"[file normalize "$customlogic_dir/02_coaxlink/ips/WrAxiAddrFifo.xcix"]"\
-		"[file normalize "$customlogic_dir/04_ref_design/frame_to_line.vhd"]"\
 		"[file normalize "$customlogic_dir/04_ref_design/mem_traffic_gen.vhd"]"\
 		"[file normalize "$customlogic_dir/04_ref_design/control_registers.vhd"]"\
     	"[file normalize "$customlogic_dir/04_ref_design/lut_bram_8x256.xcix"]"\

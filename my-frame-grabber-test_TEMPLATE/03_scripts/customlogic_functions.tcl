@@ -81,16 +81,14 @@ proc customlogic_bitgen {} {
 }
 
 proc customlogic_prog_fpga {} {
-	puts  " "
-	puts  "EURESYS_INFO: Starting FPGA programming..."
-	
-	# Get Project & Release Paths
-	set currentProject [get_projects]
-	set currentProjectPath [get_property DIRECTORY [get_projects $currentProject]]
-	set currentSettingsPath "$currentProjectPath/../02_coaxlink/settings"
-	set currentReleasePath "$currentProjectPath/../06_release"
+	puts " "
+	puts "EURESYS_INFO: Starting FPGA programming..."
+
+	# Set Paths Directly
+	set currentSettingsPath "../02_coaxlink/settings"
+	set currentReleasePath "./06_release"
 	cd $currentReleasePath
-	
+
 	# Get PlatformID
 	set fileCustomLogicSettings [open "$currentSettingsPath/CustomLogic.set" r]
 	set dataCustomLogicSettings [read $fileCustomLogicSettings]
@@ -100,18 +98,20 @@ proc customlogic_prog_fpga {} {
 			set platformID $value
 		}
 	}
-	
-	# Set File names
+
+	# Set File names based on platform ID
 	set probeFile $platformID.ltx
 	set programFile $platformID.bit
-	
-    # Get current part
-    set devicePart [get_parts -of_objects [get_projects]]
 
 	# Connect to JTAG programmer
 	open_hw
 	connect_hw_server
 	open_hw_target
+
+	# You need to specify this manually or determine dynamically
+	set devicePart "xcku035_0" 
+
+	# Assuming there is only one device connected
 	current_hw_device [lindex [get_hw_devices $devicePart] 0]
 
 	# Set files to be uploaded
@@ -126,9 +126,9 @@ proc customlogic_prog_fpga {} {
 	disconnect_hw_server
 	close_hw
 
-	puts  " "
-	puts  "EURESYS_INFO: FPGA programming completed."
-	puts  " "
+	puts " "
+	puts "EURESYS_INFO: FPGA programming completed."
+	puts " "
 }
 
 customlogic_help
