@@ -7,19 +7,21 @@
          <top_modules>
             <top_module name="customlogic_tb_pkg" />
             <top_module name="glbl" />
+            <top_module name="simulation_fileio_pkg" />
             <top_module name="simulationctrl_tb_pkg" />
             <top_module name="tb_top" />
+            <top_module name="tl_pkg" />
          </top_modules>
       </db_ref>
    </db_ref_list>
    <zoom_setting>
       <ZoomStartTime time="0fs"></ZoomStartTime>
-      <ZoomEndTime time="22632000001fs"></ZoomEndTime>
-      <Cursor1Time time="17979867000fs"></Cursor1Time>
+      <ZoomEndTime time="1305000001fs"></ZoomEndTime>
+      <Cursor1Time time="375000000fs"></Cursor1Time>
    </zoom_setting>
    <column_width_setting>
       <NameColumnWidth column_width="466"></NameColumnWidth>
-      <ValueColumnWidth column_width="252"></ValueColumnWidth>
+      <ValueColumnWidth column_width="248"></ValueColumnWidth>
    </column_width_setting>
    <WVObjectSize size="1" />
    <wvobject fp_name="group369" type="group">
@@ -48,6 +50,10 @@
          <wvobject fp_name="/tb_top/iCustomLogic/user_output_status" type="array">
             <obj_property name="ElementShortName">user_output_status[7:0]</obj_property>
             <obj_property name="ObjectShortName">user_output_status[7:0]</obj_property>
+         </wvobject>
+         <wvobject fp_name="/tb_top/iCustomLogic/custom_logic_output_ctrl" type="array">
+            <obj_property name="ElementShortName">custom_logic_output_ctrl[31:0]</obj_property>
+            <obj_property name="ObjectShortName">custom_logic_output_ctrl[31:0]</obj_property>
          </wvobject>
       </wvobject>
       <wvobject fp_name="group362" type="group">
@@ -126,12 +132,12 @@
             <obj_property name="ObjectShortName">m_axi_awready</obj_property>
          </wvobject>
          <wvobject fp_name="/tb_top/iCustomLogic/m_axi_wdata" type="array">
-            <obj_property name="ElementShortName">m_axi_wdata[127:0]</obj_property>
-            <obj_property name="ObjectShortName">m_axi_wdata[127:0]</obj_property>
+            <obj_property name="ElementShortName">m_axi_wdata[255:0]</obj_property>
+            <obj_property name="ObjectShortName">m_axi_wdata[255:0]</obj_property>
          </wvobject>
          <wvobject fp_name="/tb_top/iCustomLogic/m_axi_wstrb" type="array">
-            <obj_property name="ElementShortName">m_axi_wstrb[15:0]</obj_property>
-            <obj_property name="ObjectShortName">m_axi_wstrb[15:0]</obj_property>
+            <obj_property name="ElementShortName">m_axi_wstrb[31:0]</obj_property>
+            <obj_property name="ObjectShortName">m_axi_wstrb[31:0]</obj_property>
          </wvobject>
          <wvobject fp_name="/tb_top/iCustomLogic/m_axi_wlast" type="logic">
             <obj_property name="ElementShortName">m_axi_wlast</obj_property>
@@ -198,8 +204,8 @@
             <obj_property name="ObjectShortName">m_axi_arready</obj_property>
          </wvobject>
          <wvobject fp_name="/tb_top/iCustomLogic/m_axi_rdata" type="array">
-            <obj_property name="ElementShortName">m_axi_rdata[127:0]</obj_property>
-            <obj_property name="ObjectShortName">m_axi_rdata[127:0]</obj_property>
+            <obj_property name="ElementShortName">m_axi_rdata[255:0]</obj_property>
+            <obj_property name="ObjectShortName">m_axi_rdata[255:0]</obj_property>
          </wvobject>
          <wvobject fp_name="/tb_top/iCustomLogic/m_axi_rresp" type="array">
             <obj_property name="ElementShortName">m_axi_rresp[1:0]</obj_property>
@@ -250,8 +256,8 @@
             <obj_property name="ObjectShortName">s_axis_tready</obj_property>
          </wvobject>
          <wvobject fp_name="/tb_top/iCustomLogic/s_axis_tdata" type="array">
-            <obj_property name="ElementShortName">s_axis_tdata[127:0]</obj_property>
-            <obj_property name="ObjectShortName">s_axis_tdata[127:0]</obj_property>
+            <obj_property name="ElementShortName">s_axis_tdata[255:0]</obj_property>
+            <obj_property name="ObjectShortName">s_axis_tdata[255:0]</obj_property>
          </wvobject>
          <wvobject fp_name="/tb_top/iCustomLogic/s_axis_tuser" type="array">
             <obj_property name="ElementShortName">s_axis_tuser[3:0]</obj_property>
@@ -326,8 +332,8 @@
             <obj_property name="ObjectShortName">m_axis_tready</obj_property>
          </wvobject>
          <wvobject fp_name="/tb_top/iCustomLogic/m_axis_tdata" type="array">
-            <obj_property name="ElementShortName">m_axis_tdata[127:0]</obj_property>
-            <obj_property name="ObjectShortName">m_axis_tdata[127:0]</obj_property>
+            <obj_property name="ElementShortName">m_axis_tdata[255:0]</obj_property>
+            <obj_property name="ObjectShortName">m_axis_tdata[255:0]</obj_property>
          </wvobject>
          <wvobject fp_name="/tb_top/iCustomLogic/m_axis_tuser" type="array">
             <obj_property name="ElementShortName">m_axis_tuser[3:0]</obj_property>

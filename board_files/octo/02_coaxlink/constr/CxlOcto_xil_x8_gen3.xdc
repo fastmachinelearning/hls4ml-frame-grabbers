@@ -34,14 +34,18 @@ set_property LOC PCIE_3_1_X0Y0 [get_cells -hierarchical -filter {NAME =~ */pcie/
 ###############################################################################
 # Timing Constraints
 ###############################################################################
-create_clock -period 10.000 -name sys_clk [get_pins -hierarchical -filter {NAME =~ */refclk_ibuf/ODIV2}]
-create_clock -period 10.000 -name sys_clk_gt [get_pins -hierarchical -filter {NAME =~ */refclk_ibuf/O}]
+
+# Avoid creating primary clocks on the output pins of Clock Modifying Blocks.
+# Vivado takes care about clock definitions on IBUFDS_GTE3 output pins.
+# create_clock -period 10.000 -name sys_clk [get_pins -hierarchical -filter {NAME =~ */refclk_ibuf/ODIV2}]
+# create_clock -period 10.000 -name sys_clk_gt [get_pins -hierarchical -filter {NAME =~ */refclk_ibuf/O}]
+
 create_generated_clock -name sys_clk_bufg -source [get_pins -hierarchical -filter {NAME =~ */refclk_ibuf/ODIV2}] -divide_by 1 [get_pins -hierarchical -filter {NAME =~ */pcie/inst/bufg_gt_sysclk/O}]
 
 # TXOUTCLKSEL switches during reset. Set the tool to analyze timing with TXOUTCLKSEL set to 'b101.
 set_case_analysis 1 [get_nets -hierarchical -filter {NAME =~ */pcie/inst/gt_top_i/PHY_TXOUTCLKSEL[2]}]
 set_case_analysis 0 [get_nets -hierarchical -filter {NAME =~ */pcie/inst/gt_top_i/PHY_TXOUTCLKSEL[1]}]
-set_case_analysis 1 [get_nets -hierarchical -filter {NAME =~ */pcie/inst/gt_top_i/PHY_TXOUTCLKSEL[0]}]
+# set_case_analysis 1 [get_nets -hierarchical -filter {NAME =~ */pcie/inst/gt_top_i/PHY_TXOUTCLKSEL[0]}]
 
 set_case_analysis 0 [get_pins -hierarchical -filter {NAME =~ */pcie/*gen_channel_container[*].*gen_gthe3_channel_inst[*].GTHE3_CHANNEL_PRIM_INST/TXRATE[0]}]
 set_case_analysis 0 [get_pins -hierarchical -filter {NAME =~ */pcie/*gen_channel_container[*].*gen_gthe3_channel_inst[*].GTHE3_CHANNEL_PRIM_INST/RXRATE[0]}]
@@ -95,6 +99,15 @@ set_false_path -through [get_pins -hierarchical -filter NAME=~*/PCIESYNCTXSYNCDO
 set_false_path -through [get_pins -hierarchical -filter NAME=~*/GTPOWERGOOD]
 set_false_path -through [get_pins -hierarchical -filter NAME=~*/CPLLLOCK]
 set_false_path -through [get_pins -hierarchical -filter NAME=~*/QPLL1LOCK]
+
+####################################################################################
+# Update QPLL1 settings for PCIe GTH transceivers to avoid PCIe link-up issues.
+# Visit https://support.xilinx.com/s/article/000035719?language=en_US for details.
+####################################################################################
+
+set_property QPLL1_CFG2         16'h0040 [get_cells -hierarchical -filter { PRIMITIVE_TYPE =~ ADVANCED.GT.GTHE3_COMMON && PARENT =~ "*pcie*" }]; # original value causing failures in PCIe link-up (spread-spectrum clock enabled): 16'h0000
+set_property QPLL1_LOCK_CFG     16'h21E8 [get_cells -hierarchical -filter { PRIMITIVE_TYPE =~ ADVANCED.GT.GTHE3_COMMON && PARENT =~ "*pcie*" }]; # original value causing failures in PCIe link-up (spread-spectrum clock enabled): 16'h25E8
+set_property QPLL1_LOCK_CFG_G3  16'h21E8 [get_cells -hierarchical -filter { PRIMITIVE_TYPE =~ ADVANCED.GT.GTHE3_COMMON && PARENT =~ "*pcie*" }]; # original value causing failures in PCIe link-up (spread-spectrum clock enabled): 16'h25E8
 
 ###############################################################################
 # End

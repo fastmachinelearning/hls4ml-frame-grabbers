@@ -3,8 +3,8 @@
 --------------------------------------------------------------------------------
 --  Module: tb_top
 --    File: tb_top.vhd
---    Date: 2021-03-05
---     Rev: 0.3
+--    Date: 2023-03-07
+--     Rev: 0.4
 --  Author: PP
 --------------------------------------------------------------------------------
 -- CustomLogic testbench - Top level
@@ -13,6 +13,7 @@
 -- 0.2, 2019-10-24, PP, Added General Purpose I/O Interface
 -- 0.3, 2021-03-05, PP, Added *mem_base and *mem_size ports into the On-Board
 --                      Memory interface
+-- 0.4, 2023-03-07, MH, Added CustomLogic output control
 --------------------------------------------------------------------------------
 
 --------------------------------------------------------------------------------
@@ -47,6 +48,7 @@ architecture behav of tb_top is
 	signal qdc2_position_status			: std_logic_vector( 31 downto 0);
 	signal qdc3_position_status			: std_logic_vector( 31 downto 0);
 	signal qdc4_position_status			: std_logic_vector( 31 downto 0);
+	signal custom_logic_output_ctrl		: std_logic_vector( 31 downto 0);
 	signal reserved						: std_logic_vector(511 downto 0);
 	-- Control Slave Interface
 	signal s_ctrl_addr					: std_logic_vector( 15 downto 0);
@@ -180,6 +182,7 @@ begin
 			qdc2_position_status		=> qdc2_position_status,
 			qdc3_position_status		=> qdc3_position_status,
 			qdc4_position_status		=> qdc4_position_status,
+			custom_logic_output_ctrl	=> custom_logic_output_ctrl,
 			reserved					=> reserved,
 			-- Control Master Interface
 			m_ctrl_addr					=> s_ctrl_addr,
@@ -287,6 +290,7 @@ begin
 			standard_io_set2_status		=> standard_io_set2_status,
 			module_io_set_status		=> module_io_set_status,
 			qdc1_position_status		=> qdc1_position_status,
+			custom_logic_output_ctrl	=> custom_logic_output_ctrl,
 			reserved					=> reserved,
 			-- Control Slave Interface
 			s_ctrl_addr					=> s_ctrl_addr,

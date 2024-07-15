@@ -8,6 +8,7 @@
 # -- 0.2, 2019-10-29, PP, Added Vivado version check
 # --                      Added automatic IP upgrade
 # -- 0.3, 2021-06-18, PP, Updated list of files
+# -- 0.4, 2023-02-20, PP, Updated to support Vitis 2022.2
 # --------------------------------------------------------------------------------
 
 proc customlogicCreateProject {} {
@@ -15,7 +16,7 @@ proc customlogicCreateProject {} {
 	puts  "EURESYS_INFO: Creating the CustomLogic Vivado project..."
 	
 	# Check Vivado version
-	set sup_viv_version 2018.3
+	set sup_viv_version 2022.2
 	set cur_viv_version [version -short]
 	puts "EURESYS_INFO: Current Vivado version: $cur_viv_version"
 	if {[expr $cur_viv_version == $sup_viv_version]} {
@@ -57,6 +58,7 @@ proc customlogicCreateProject {} {
 	set files [list \
 		"[file normalize "$customlogic_dir/02_coaxlink/hdl_enc/CustomLogicPkt.vp"]"\
 		"[file normalize "$customlogic_dir/02_coaxlink/hdl_enc/CustomLogicPkt.vhdp"]"\
+		"[file normalize "$customlogic_dir/02_coaxlink/hdl_enc/CustomLogicTopPkt.vhdp"]"\
 		"[file normalize "$customlogic_dir/02_coaxlink/dcp/CoaxlinkDcp.dcp"]"\
 		"[file normalize "$customlogic_dir/02_coaxlink/ips/axi_dwidth_converter_S128_M512.xcix"]"\
 		"[file normalize "$customlogic_dir/02_coaxlink/ips/axi_dwidth_clk_converter_S128_M512.xcix"]"\
@@ -88,10 +90,10 @@ proc customlogicCreateProject {} {
 		"[file normalize "$customlogic_dir/02_coaxlink/ips/WrAxiAddrFifo.xcix"]"\
 		"[file normalize "$customlogic_dir/04_ref_design/mem_traffic_gen.vhd"]"\
 		"[file normalize "$customlogic_dir/04_ref_design/control_registers.vhd"]"\
-    	"[file normalize "$customlogic_dir/04_ref_design/lut_bram_8x256.xcix"]"\
 		"[file normalize "$customlogic_dir/04_ref_design/myproject_axi_wrp.vhd"]"\
 		"[file normalize "$customlogic_dir/04_ref_design/CustomLogic.vhd"]"\
 		"[file normalize "$customlogic_dir/04_ref_design/signal_inference.v"]"\
+		"[file normalize "$customlogic_dir/04_ref_design/lut_bram_8x256.xcix"]"\
 	]
 
   # Add model HDL files
@@ -158,7 +160,7 @@ proc customlogicCreateProject {} {
 	# Set 'sim_1' fileset properties
 	set obj [get_filesets sim_1]
 	set_property "top" "tb_top" $obj
-	set_property RUNTIME 1000us $obj
+	set_property RUNTIME 100us $obj
 	set ipList [get_ips]
 	foreach file $ipList {
 		set_property used_in_simulation false [get_files $file.xci]
@@ -168,6 +170,7 @@ proc customlogicCreateProject {} {
 	set_property used_in_synthesis false [get_files "$customlogic_dir/04_ref_design/sim/onboardmem/onboardmem.xci"]
 	set_property used_in_implementation false [get_files "$customlogic_dir/04_ref_design/sim/onboardmem/onboardmem.xci"]
 	set_property used_in_simulation true [get_files "$customlogic_dir/04_ref_design/sim/onboardmem/onboardmem.xci"]
+	set_property used_in_simulation true [get_files "$customlogic_dir/04_ref_design/lut_bram_8x256/lut_bram_8x256.xci"]
 	
 	puts  "EURESYS_INFO: Creating the CustomLogic Vivado project... done"
 }

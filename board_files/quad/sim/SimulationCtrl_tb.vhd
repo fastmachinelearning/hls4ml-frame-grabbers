@@ -3,8 +3,8 @@
 --------------------------------------------------------------------------------
 --  Module: SimulationCtrl_tb
 --    File: SimulationCtrl_tb.vhd
---    Date: 2022-05-31
---     Rev: 0.4
+--    Date: 2023-03-07
+--     Rev: 0.5
 --  Author: PP
 --------------------------------------------------------------------------------
 -- Simulation Control
@@ -14,6 +14,7 @@
 --                      Added Ref_UserOutputReg_set command
 -- 0.3, 2021-02-25, PP, Added onboard_mem port to define On-Board Memory type
 -- 0.4, 2022-05-31, MH, Added read-file option to FrameRequest command
+-- 0.5, 2023-03-07, MH, Added Ref_CLogicOutputReg_set command
 --------------------------------------------------------------------------------
 
 library ieee;
@@ -173,6 +174,17 @@ begin
 	--		Example:
 	-- 			Ref_UserOutputReg_set(clk,status,ctrl, x"6666");
 	--
+	-- 	Ref_CLogicOutputReg_set
+	--	---------------------
+	--		Description:
+	--			Set the CustomLogic Output Register
+	--		Syntax:
+	-- 			Ref_CLogicOutputReg_set(clk,status,ctrl, <clogic_out>);
+	--		Arguments:
+	--			<clogic_out>	: Type='std_logic_vector(31 downto 0)', Range=(x"00000000" to x"FFFFFFFF")
+	--		Example:
+	-- 			Ref_CLogicOutputReg_set(clk,status,ctrl, x"AAAAAAAA");
+	--
 	-- 	Ref_Frame2Line_on
 	--	-----------------
 	--		Description:
@@ -262,7 +274,7 @@ begin
 		Ref_MementoEvent_gen	(clk,status,ctrl, 0, x"AAAAAAAA");
 		Ref_PixelLut_Negative_on(clk,status,ctrl, 0);
 		EnableDataStream		(clk,status,ctrl, 0);
-    	FrameRequest			(clk,status,ctrl, 0, 10, 128, 32, Mono8, FALSE);
+		FrameRequest			(clk,status,ctrl, 0, 5, 256, 10, Mono8, FALSE);
 
 		-- To read image data from a file, change the absolute path here below to locate the file containing the data.
 		-- In addition, Linux users must update the FILE_PATH_LENGTH constant in Simulation_FileIO_pkg.vhd
