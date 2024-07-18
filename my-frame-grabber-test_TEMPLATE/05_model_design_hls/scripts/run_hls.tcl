@@ -41,7 +41,7 @@ add_files $sourcePath/myproject.cpp -cflags "-std=c++0x"
 add_files -tb $sourcePath/myproject_test.cpp -cflags "-Wno-unknown-pragmas"
 open_solution "KCU035"
 catch {config_array_partition -maximum_size 4096}
-set_part {xcku035-fbva676-2-e} -tool vivado
+set_part {xcku035-fbva676-2-e}
 create_clock -period 2 -name default
 set_clock_uncertainty .25 default
 config_compile -no_signed_zeros=0 -unsafe_math_optimizations=0
