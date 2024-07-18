@@ -37,6 +37,7 @@ entity CustomLogic is
     standard_io_set2_status    : in  std_logic_vector(  9 downto 0);
     module_io_set_status    : in  std_logic_vector( 39 downto 0);
     qdc1_position_status    : in  std_logic_vector( 31 downto 0);
+                custom_logic_output_ctrl        : out std_logic_vector( 31 downto 0);
     reserved          : in  std_logic_vector(511 downto 0) := (others=>'0');
     -- Control Slave Interface
     s_ctrl_addr          : in  std_logic_vector( 15 downto 0);
@@ -80,7 +81,7 @@ entity CustomLogic is
     m_axi_rresp         : in  std_logic_vector(  1 downto 0);
     m_axi_rlast         : in  std_logic;
     m_axi_rvalid         : in  std_logic;
-    m_axi_rready         : out std_logic;  
+    m_axi_rready         : out std_logic;
     ---- CustomLogic Device/Channel Interfaces -----------------------------
     -- AXI Stream Slave Interface
     s_axis_resetn        : in  std_logic;  -- AXI Stream Interface reset
@@ -133,7 +134,7 @@ architecture behav of CustomLogic is
   ----------------------------------------------------------------------------
   -- Constants
   ----------------------------------------------------------------------------
-  
+
 
   ----------------------------------------------------------------------------
   -- Types
@@ -149,7 +150,6 @@ architecture behav of CustomLogic is
   -- Components
   ----------------------------------------------------------------------------
 
-
   ----------------------------------------------------------------------------
   -- Signals
   ----------------------------------------------------------------------------
@@ -157,7 +157,7 @@ architecture behav of CustomLogic is
   signal MemTrafficGen_en          : std_logic;
   signal MementoEvent_en          : std_logic;
   signal MementoEvent_arg0        : std_logic_vector(31 downto 0);
-  
+
   -- Memento Events
   signal Wraparound_pls          : std_logic;
   signal Wraparound_cnt          : std_logic_vector(31 downto 0);
@@ -240,6 +240,7 @@ begin
       StandardIoSet2_status    => standard_io_set2_status,
       ModuleIoSet_status      => module_io_set_status,
       Qdc1Position_status      => qdc1_position_status,
+      CustomLogicOutput_ctrl          => custom_logic_output_ctrl,
       Frame2Line_bypass    => open,
       MementoEvent_en(0)      => MementoEvent_en,
       MementoEvent_arg0      => MementoEvent_arg0,
@@ -251,7 +252,7 @@ begin
       PixelThreshold_bypass  => open,
       PixelThreshold_level    => open
     );
-    
+
   -- Read/Write On-Board Memory
   iMemTrafficGen : entity work.mem_traffic_gen
     generic map (
@@ -297,10 +298,10 @@ begin
       m_axi_rvalid     => m_axi_rvalid,
       m_axi_rready     => m_axi_rready
     );
-  
+
   -- Generate CustomLogic events on Memento
   m_memento_event   <= MementoEvent_en or Wraparound_pls;
   m_memento_arg0    <= MementoEvent_arg0;
   m_memento_arg1    <= Wraparound_cnt;
-  
+
 end behav;

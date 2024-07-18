@@ -46,6 +46,7 @@ entity control_registers is
 		Qdc2Position_status			: in  std_logic_vector( 31 downto 0) := (others=>'0');
 		Qdc3Position_status			: in  std_logic_vector( 31 downto 0) := (others=>'0');
 		Qdc4Position_status			: in  std_logic_vector( 31 downto 0) := (others=>'0');
+		CustomLogicOutput_ctrl		: out std_logic_vector( 31 downto 0) := (others=>'0'); 
 		Frame2Line_bypass			: out std_logic_vector(NB_OF_DEVICES    - 1 downto 0);
 		MementoEvent_en				: out std_logic_vector(NB_OF_DEVICES    - 1 downto 0);
 		MementoEvent_arg0			: out std_logic_vector(NB_OF_DEVICES*32 - 1 downto 0);
@@ -77,6 +78,7 @@ architecture behav of control_registers is
 	constant ADDR_QDC2POSSTATUS		: std_logic_vector(15 downto 0) := x"0011";
 	constant ADDR_QDC3POSSTATUS		: std_logic_vector(15 downto 0) := x"0012";
 	constant ADDR_QDC4POSSTATUS		: std_logic_vector(15 downto 0) := x"0013";
+	constant ADDR_CLOGICOUTCTRL		: std_logic_vector(15 downto 0) := x"0018";
 	
 	-- Channel (n) addresses
 	-- Address = Offset + 1000h + (n)*100h
@@ -118,6 +120,7 @@ architecture behav of control_registers is
 	signal scratchpad_reg			: std_logic_vector(31 downto 0);
 	signal memtrafficgen_en_reg		: std_logic;
 	signal user_output_ctrl_reg		: std_logic_vector(15 downto 0);
+	signal clogic_output_ctrl_reg	: std_logic_vector(31 downto 0);
 	signal frame2line_bypass_reg	: std_logic_vector(NB_OF_DEVICES - 1 downto 0);
 	signal mementoevent_en_reg		: std_logic_vector(NB_OF_DEVICES - 1 downto 0);
 	signal mementoevent_reg			: cl_stdlv_32b_a  (NB_OF_DEVICES - 1 downto 0);
@@ -161,6 +164,8 @@ begin
 						memtrafficgen_en_reg <= s_ctrl_data_wr(0);
 					when ADDR_USEROUTCTRL =>
 						user_output_ctrl_reg <= s_ctrl_data_wr(15 downto 0);
+					when ADDR_CLOGICOUTCTRL =>
+						clogic_output_ctrl_reg <= s_ctrl_data_wr(31 downto 0);
 					when others =>
 				end case;
 			end if;
@@ -204,6 +209,7 @@ begin
 				scratchpad_reg			<= (others=>'0');
 				memtrafficgen_en_reg	<= '0';
 				user_output_ctrl_reg	<= (others=>'0');
+				clogic_output_ctrl_reg	<= (others=>'0');
 				for DEVICE in 0 to NB_OF_DEVICES - 1 loop
 					frame2line_bypass_reg 	(DEVICE) <= '1';
 					mementoevent_reg 		(DEVICE) <= (others=>'0');
@@ -248,6 +254,8 @@ begin
 					s_ctrl_data_rd(31 downto 0) <= Qdc3Position_status(31 downto 0);
 				when ADDR_QDC4POSSTATUS =>
 					s_ctrl_data_rd(31 downto 0) <= Qdc4Position_status(31 downto 0);
+				when ADDR_CLOGICOUTCTRL =>
+					s_ctrl_data_rd(31 downto 0) <= clogic_output_ctrl_reg;
 				when others =>
 			end case;
 			
@@ -279,8 +287,9 @@ begin
 	end process;
 	
 	---- Output Register Mapping -----------------------------------------------
-	MemTrafficGen_en 	<= memtrafficgen_en_reg;
-	UserOutput_ctrl 	<= user_output_ctrl_reg;
+	MemTrafficGen_en 		<= memtrafficgen_en_reg;
+	UserOutput_ctrl 		<= user_output_ctrl_reg;
+	CustomLogicOutput_ctrl 	<= clogic_output_ctrl_reg;
 	
 	gOutputMapping : for DEVICE in 0 to NB_OF_DEVICES - 1 generate 
 		Frame2Line_bypass	    (DEVICE) <= frame2line_bypass_reg	(DEVICE);
