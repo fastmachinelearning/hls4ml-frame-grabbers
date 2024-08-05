@@ -63,6 +63,8 @@ typedef struct pix_fmt_mono{
   unsigned char Pixel[MONOPIX_NBR];
 }Mono;
 
+static const unsigned PACKED_DEPTH =  ((IMAGE_WIDTH * IMAGE_HEIGHT) / MONOPIX_NBR);
+static const unsigned UNPACKED_DEPTH = (CROP_WIDTH * CROP_HEIGHT);
 static const unsigned NUM_STRIPES = IMAGE_HEIGHT/(BLOCK_HEIGHT/2); // Number of stripes in image
 static const unsigned stripe_order[NUM_STRIPES] = /* CustomLogic: INSERT STRIPE ORDER HERE */ ; 
 static const unsigned STRIPE_HEIGHT = BLOCK_HEIGHT/2; // Stripe height in pixels
