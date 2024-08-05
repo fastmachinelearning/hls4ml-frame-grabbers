@@ -306,9 +306,6 @@ void myproject(
     //hls-fpga-machine-learning insert IO
     #pragma HLS DATAFLOW 
 
-    static const unsigned PACKED_DEPTH =  ((IMAGE_WIDTH * IMAGE_HEIGHT) / MONOPIX_NBR);
-    static const unsigned UNPACKED_DEPTH = (CROP_WIDTH * CROP_HEIGHT);
-
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////
     
 
