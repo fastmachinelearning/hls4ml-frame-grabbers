@@ -3,6 +3,7 @@ channels:
   - conda-forge
 dependencies:
   - python=3.8.13=ha86cf86_0_cpython
+  - pip
   - ipykernel=6.13.0=py38h7f3c49e_0
   - ipython=8.2.0=py38h578d9bd_0
   - matplotlib-inline=0.1.3=pyhd8ed1ab_0
