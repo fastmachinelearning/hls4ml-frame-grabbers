@@ -149,10 +149,10 @@ void read_pixel_data(hls::stream<video_if_t> &VideoIn, hls::stream<video_if_t> &
           ctype[i] = ((ap_ufixed<32,pixMono::width>)DataBuf.MONOPIX(i)) / NORM_DIV; //Normalize pixel values and set input to model
         }
 
-				// Set output control signal
-				output_buf.User = DataBuf.User;
-				//Store the result in the output stream
-				VideoBuffer << output_buf;
+        // Set output control signal
+        output_buf.User = DataBuf.User;
+        //Store the result in the output stream
+        VideoBuffer << output_buf;
 
         // Reorder image for input to model and write to output
         input_arr_split_reordered[stripe_order[curr_Y / STRIPE_HEIGHT]].write(ctype);
