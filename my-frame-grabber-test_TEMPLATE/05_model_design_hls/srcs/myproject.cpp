@@ -146,7 +146,7 @@ void read_pixel_data(hls::stream<video_if_t> &VideoIn, hls::stream<video_if_t> &
         Process_pixel:
         for (unsigned char i = 0; i < MONOPIX_NBR; i++) {
           output_buf.MONOPIX(i) = DataBuf.MONOPIX(i);
-          ctype[i] = ((ap_ufixed<32,pixMono::width>)DataBuf.MONOPIX(i)) / NORM_DIV; //Normalize pixel values and set input to model // TODO: Add functions for different methods of scaling.
+          ctype[i] = ((ap_ufixed<32,pixMono::width>)DataBuf.MONOPIX(i)) / NORM_DIV; //Normalize pixel values and set input to model
         }
 
 				// Set output control signal
