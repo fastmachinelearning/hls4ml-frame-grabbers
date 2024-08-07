@@ -1,6 +1,6 @@
 ### Getting Started
 
-A tutorial and reference design for machine learning inference on FPGA-based frame grabber devices in high-throughput imaging applications. This tutorial leverages the hls4ml package and the CustomLogic toolkit to deploy neural networks to Euresys frame grabber devices. Refer to ```hls4ml-frame-grabber-tutorial.ipynb``` to get started. See ```part9_YOLO_frame_grabbers.ipynb``` for a more advanced guide on implementing a YOLO-style model and taking advantage of the suite of optimizations hls4ml provides.
+A tutorial and reference design for machine learning inference on FPGA-based frame grabber devices in high-throughput imaging applications. This tutorial leverages the hls4ml package and the CustomLogic toolkit to deploy neural networks to Euresys frame grabber devices. Refer to ```hls4ml-frame-grabber-tutorial.ipynb``` to get started. See ```part9_FOLO_frame_grabbers_advanced_features.ipynb``` for a more advanced guide on implementing a YOLO-style model and taking advantage of the suite of optimizations hls4ml provides.
 
 
 To install ```hls4ml_frame_grabber``` conda environment
