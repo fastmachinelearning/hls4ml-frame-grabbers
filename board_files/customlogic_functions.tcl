@@ -5,11 +5,13 @@
 # --              customlogic_bitgen
 # --              customlogic_prog_fpga
 # --        File: customlogic_functions.tcl
-# --        Date: 2018-11-15
-# --         Rev: 0.1
+# --        Date: 2024-08-07
+# --         Rev: 0.2
 # --      Author: PP
 # --------------------------------------------------------------------------------
 # -- 0.1, 2018-11-15, PP, Initial release
+# -- 0.2, 2024-08-07, RF, Adapted for hls4ml frame grabber tutorial, modified
+#                         functions to use non-project mode and checkpoints  
 # --------------------------------------------------------------------------------
 
 proc customlogic_help {} {

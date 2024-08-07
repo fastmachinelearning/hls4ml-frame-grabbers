@@ -3,8 +3,8 @@
 --------------------------------------------------------------------------------
 --  Module: CustomLogic
 --    File: CustomLogic.vhd
---    Date: 2021-02-25
---     Rev: 0.4
+--    Date: 2024-08-07
+--     Rev: 0.5
 --  Author: PP
 --------------------------------------------------------------------------------
 -- CustomLogic wrapper for the user design
@@ -14,6 +14,8 @@
 -- 0.3, 2019-10-24, PP, Added General Purpose I/O Interface
 -- 0.4, 2021-02-25, PP, Added *mem_base and *mem_size ports into the On-Board
 --                      Memory interface
+-- 0.5, 2024-08-07, RF, Adapted for hls4ml frame grabber tutorial, added 
+--                      neural network, removed unnecessary modules
 --------------------------------------------------------------------------------
 
 library ieee;

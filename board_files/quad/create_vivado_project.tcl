@@ -9,6 +9,8 @@
 # --                      Added automatic IP upgrade
 # -- 0.3, 2021-06-18, PP, Updated list of files
 # -- 0.4, 2023-02-20, PP, Updated to support Vitis 2022.2
+# -- 0.5, 2024-08-07, RF, Adapted for hls4ml frame grabber tutorial, added hls4ml
+#                         neural network RTL to project
 # --------------------------------------------------------------------------------
 
 proc customlogicCreateProject {} {

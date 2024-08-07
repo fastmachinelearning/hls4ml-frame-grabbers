@@ -6,6 +6,8 @@
 # --------------------------------------------------------------------------------
 # -- 0.1, 2022-11-30, PP, Initial release
 # -- 0.2, 2023-02-20, PP, Updated to support Vitis 2022.2
+# -- 0.3, 2024-08-07, RF, Adapted for hls4ml frame grabber tutorial, added hls4ml
+#                         neural network RTL to project
 # --------------------------------------------------------------------------------
 
 proc customlogicCreateProject {} {
