@@ -39,6 +39,9 @@ set_top myproject_axi
 add_files $sourcePath/myproject_axi.cpp -cflags "-std=c++0x"	
 add_files $sourcePath/myproject.cpp -cflags "-std=c++0x"
 add_files -tb $sourcePath/myproject_test.cpp -cflags "-Wno-unknown-pragmas"
+add_files -tb $sourcePath/src/weights
+add_files -tb $sourcePath/tb_data
+
 open_solution "KCU035"
 catch {config_array_partition -maximum_size 4096}
 set_part {xcku035-fbva676-2-e}
