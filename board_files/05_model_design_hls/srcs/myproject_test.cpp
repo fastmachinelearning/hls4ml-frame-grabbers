@@ -111,10 +111,10 @@ int main(int argc, char **argv)
 {
 
   //load input data from text file
-  std::ifstream fin("../../../../tb_data/tb_input_features.dat");
-  std::ifstream fpr("../../../../tb_data/tb_output_predictions.dat");
+  std::ifstream fin("tb_data/tb_input_features.dat");
+  std::ifstream fpr("tb_data/tb_output_predictions.dat");
 
-  std::ofstream fout("../../../../tb_data/csim_results.log");
+  std::ofstream fout("tb_data/csim_results.log");
   if (!fout.is_open()) {
       std::cerr << "Error opening prediction file." << std::endl;
       exit(1);
