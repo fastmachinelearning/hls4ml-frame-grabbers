@@ -3,6 +3,7 @@
 #include <stdio.h>
 #include "ap_int.h"
 #include "ap_fixed.h"
+#include "defines.h"
 
 #define PIXEL_FORMAT  // CustomLogic: INSERT PIXEL FORMAT. VALID VALUES: 8,16
 
@@ -41,7 +42,7 @@ typedef ap_uint<PIXEL_FORMAT> pixMono;
 #define MONOPIX_NBR (STREAM_DATA_WIDTH/PIXEL_FORMAT)
 #define MONOPIX(j) Data((PIXEL_FORMAT*(j))+(PIXEL_FORMAT-1),(PIXEL_FORMAT*(j)))
 #define MONOINDEXPIX(j) ((PIXEL_FORMAT*(j))+(PIXEL_FORMAT-1),(PIXEL_FORMAT*(j)))
-
+typedef nnet::array<input_t::value_type, MONOPIX_NBR> input_arr_t;
 typedef ap_uint<MONOPIX_NBR*PIXEL_FORMAT> DataMono;
 typedef ap_uint<4> User;
 
