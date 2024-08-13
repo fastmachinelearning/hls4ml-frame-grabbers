@@ -184,7 +184,7 @@ void read_pixel_data(hls::stream<video_if_t> &VideoIn, hls::stream<video_if_t> &
 void attach_results(hls::stream<result_t> &layer_out, hls::stream<video_if_t> &VideoBuffer, hls::stream<video_if_t> &VideoOut){
 
   #ifndef __SYNTHESIS__
-    std::ofstream fout("../../../../tb_data/csim_results.log", std::ios::app);
+    std::ofstream fout("tb_data/csim_results.log", std::ios::app);
   #endif
 
   unsigned output_count = 0;
