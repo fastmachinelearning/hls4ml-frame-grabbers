@@ -290,7 +290,7 @@ void benchmark_model(hls::stream<result_t> &layer_out, result_t::value_type &Mod
  * @param VideoOut CustomLogic output stream
  * @param ModelOutFirst Final model output, used for inference benchmarking
  */
-void myproject(
+void myproject_wrapper(
     hls::stream<video_if_t> &VideoIn, 
     hls::stream<video_if_t> &VideoOut,
     result_t::value_type &ModelOutFirst // Output a model result so we can monitor inference latency
@@ -323,14 +323,6 @@ void myproject(
     hls::stream<result_t> layerfinal_out_cpy2("layerfinal_out_cpy2");
     #pragma HLS STREAM variable=layerfinal_out_cpy2 depth=MODEL_OUT_DEPTH
 
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////
-    
-
-/* CustomLogic: INSERT MODEL WEIGHT LOAD STATEMENTS HERE */
-
-
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
     hls::stream<input_arr_t> input_arr_split_reordered[NUM_STRIPES];
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -351,13 +343,7 @@ void myproject(
 
     unpack_data(input_arr_split_reordered, input_1); // Crop image by unpacking only pixels which serve as input to model
 
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-
-/* CustomLogic: INSESRT NEURAL NETWORK LAYERS HERE */
-
-
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    myproject(input_1, layerfinal_out); // Call neural network
 
     nnet::clone_stream<result_t, result_t, MODEL_OUT_DEPTH*result_t::size>(layerfinal_out, layerfinal_out_cpy1, layerfinal_out_cpy2); // Clone model output stream
 

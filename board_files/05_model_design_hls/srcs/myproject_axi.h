@@ -3,6 +3,11 @@
 
 #include "CustomLogic.h"
 #include <iostream>
+#include <fstream>
+#include "ap_int.h"
+#include "hls_stream.h"
+#include "nnet_utils/nnet_helpers.h"
+#include "nnet_utils/nnet_stream.h"
 #include "myproject.h"
 
 Metadata_t meta_data_proc(Metadata_t MetaIn);

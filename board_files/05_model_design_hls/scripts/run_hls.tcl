@@ -34,7 +34,8 @@ cd $hlsProjectPath
 
 puts "EURESYS_INFO: Generating \"myproject_axi\" IP..."
 
-open_project myproject_axi
+# open_project myproject_axi
+open_project -reset myproject_axi
 set_top myproject_axi
 add_files $sourcePath/myproject_axi.cpp -cflags "-std=c++0x"	
 add_files $sourcePath/myproject.cpp -cflags "-std=c++0x"
