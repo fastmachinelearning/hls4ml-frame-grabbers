@@ -14,4 +14,4 @@ To install ```hls4ml_frame_grabber``` conda environment
 
 ### Acknowledgement
 
-Primary development was completed by Fermi National Accelerator Laboratory, Northwestern University, and Drexel University. This work resulted from the implementation described in this paper: https://arxiv.org/abs/2312.00128. Deepest thanks to Euresys for their assistance in this development.
+Primary development was completed by Fermi National Accelerator Laboratory, Northwestern University, and Drexel University. This work resulted from the implementation described in this paper: https://arxiv.org/abs/2312.00128. Deepest thanks to Euresys and Columbia University for their assistance and contributions to this development.
