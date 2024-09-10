@@ -11,6 +11,12 @@ To install ```hls4ml_frame_grabber``` conda environment
 
 - ```ipython kernel install --user --name=hls4ml_frame_grabber```
 
+### Medium article
+
+We have also released ```hls4ml-frame-grabber-tutorial.ipynb``` in a medium article format which can be found here
+
+INSERT LINK HERE
+
 
 ### Acknowledgement
 
