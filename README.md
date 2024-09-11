@@ -13,9 +13,7 @@ To install ```hls4ml_frame_grabber``` conda environment
 
 ### Medium article
 
-We have also released ```hls4ml-frame-grabber-tutorial.ipynb``` in a medium article format which can be found here
-
-INSERT LINK HERE
+We have also released ```hls4ml-frame-grabber-tutorial.ipynb``` in a medium article format which can be found [here](https://medium.com/@forelliryan/deploying-neural-networks-for-in-situ-inference-on-frame-grabber-fpgas-in-high-speed-imaging-6201557fdabc).
 
 
 ### Acknowledgement
