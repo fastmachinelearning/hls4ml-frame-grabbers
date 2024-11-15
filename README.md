@@ -1,5 +1,5 @@
 <p align="center">
-   <img src="ml4fg_logo_color.svg" alt="hls4ml" width="400"/>
+   <img src="ml4fg_logo_color.svg" alt="ml4fg" width="400"/>
 </p>
 
 ### Getting Started
