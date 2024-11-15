@@ -1,3 +1,7 @@
+<p align="center">
+   <img src="ml4fg_logo_color.svg" alt="hls4ml" width="400"/>
+</p>
+
 ### Getting Started
 
 A tutorial and reference design for machine learning inference on FPGA-based frame grabber devices in high-throughput imaging applications. This tutorial leverages the hls4ml package and the CustomLogic toolkit to deploy neural networks to Euresys frame grabber devices. Refer to ```hls4ml-frame-grabber-tutorial.ipynb``` to get started. See ```part9_FOLO_frame_grabbers_advanced_features.ipynb``` for a more advanced guide on implementing a YOLO-style model and taking advantage of the suite of optimizations hls4ml provides.
